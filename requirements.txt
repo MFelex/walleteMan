@@ -1,0 +1,11 @@
+loguru
+fastapi[all]==0.109.2
+gunicorn==21.2.0
+uvicorn==0.24.0
+pydantic==2.4
+pydantic-settings
+SQLAlchemy==2.0.23
+alembic==1.12.1
+pytest==7.4.3
+psycopg2-binary==2.9.9
+fastapi-restful==0.5.0
