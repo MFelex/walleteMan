@@ -10,7 +10,7 @@ def create_app() -> FastAPI:
     config = dict(
         servers=[
             {
-                'url': 'https://api.aircodeup.ir',
+                'url': 'https://api.walleteman.net',
                 'description': 'Production environment',
             },
         ],

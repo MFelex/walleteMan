@@ -40,11 +40,11 @@ def create_withdraw(body: WithdrawRequest, db: Session) -> None:
     db.commit()
 
 
-def get_withdraw(pk: int, db: Session) -> Union[Withdraw, None]:
+def get_withdraw(pk: int, db: Session) -> Union[Withdraw]:
     return db.query(Withdraw).filter(Withdraw.id == pk).first()  # noqa
 
 
-def get_open_withdraw_requests(db: Session) -> List[Withdraw, None]:
+def get_open_withdraw_requests(db: Session) -> List[Withdraw]:
     return db.query(Withdraw).filter(  # noqa
         Withdraw.status == WithdrawStatus.OPEN,
         Withdraw.withdraw_at <= datetime.now(),  # noqa

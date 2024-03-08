@@ -22,8 +22,8 @@ RUN chmod +x start.sh
 RUN /app/venv/bin/pip install -e .
 
 ENV PATH="/app/venv/bin/:${PATH}"
-ENV MODULE_NAME=meet.main
-ENV SERVICE_NAME=meet
+ENV MODULE_NAME=wallet.main
+ENV SERVICE_NAME=wallet
 ENV MAX_WORKERS=2
 
 USER app

@@ -1,4 +1,4 @@
 #! /usr/bin/env bash
 
 echo "Run migrations"
-#alembic upgrade head
+alembic upgrade head

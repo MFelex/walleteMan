@@ -1,9 +1,7 @@
 import json
-from typing import List
 
 import requests
 from loguru import logger
-from sqlalchemy.orm import Session
 
 from wallet.models.crud import *
 from wallet.core.config import env
