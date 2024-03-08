@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from wallet.models.choices import WithdrawStatus
 from wallet.models.dbmodels import Wallet, Deposit, Withdraw
-from wallet.models.schemas import Deposit, WithdrawRequest
+from wallet.models.schemas import WithdrawRequest
 
 
 def create_wallet(user_id: int, db: Session) -> Wallet:
@@ -28,7 +28,7 @@ def get_with_lock_wallet(user_id: int, db: Session) -> Union[Wallet, None]:
     return db.query(Wallet).filter(Wallet.user_id == user_id).with_for_update().first()  # noqa
 
 
-def create_deposit(body: Deposit, db: Session) -> None:
+def create_deposit(body, db: Session) -> None:
     trx = Deposit(**body.model_dump())
     db.add(trx)
     db.commit()

@@ -20,8 +20,8 @@ class Wallet(BaseModel):
 
     id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True, index=True)
     user_id = Column(BigInteger().with_variant(Integer, 'sqlite'), index=True, unique=True, nullable=False)
-    amount = Column(Numeric(precision=50, scale=10), default='0')
-    blocked_amount = Column(Numeric(precision=50, scale=10), default='0')
+    amount = Column(BigInteger().with_variant(Integer, 'sqlite'), default=0)
+    blocked_amount = Column(BigInteger().with_variant(Integer, 'sqlite'), default=0)
 
 
 class Deposit(BaseModel):
@@ -29,9 +29,8 @@ class Deposit(BaseModel):
 
     id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True, index=True)
     user_id = Column(BigInteger().with_variant(Integer, 'sqlite'), index=True, nullable=False)
-    amount = Column(Numeric(precision=50, scale=10), default='0')
+    amount = Column(BigInteger().with_variant(Integer, 'sqlite'), default=0)
     tx_id = Column(String, unique=True, nullable=False)
-    updated_at = None
 
 
 class Withdraw(BaseModel):
@@ -39,7 +38,7 @@ class Withdraw(BaseModel):
 
     id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True, index=True)
     user_id = Column(BigInteger().with_variant(Integer, 'sqlite'), index=True, nullable=False)
-    amount = Column(Numeric(precision=50, scale=10), default='0')
+    amount = Column(BigInteger().with_variant(Integer, 'sqlite'), default=0)
     status = Column(Enum(WithdrawStatus), default=WithdrawStatus.OPEN)
     withdraw_at = Column(DateTime(timezone=True), nullable=False)
     description = Column(String, nullable=True)

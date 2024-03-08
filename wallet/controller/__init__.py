@@ -9,7 +9,7 @@ from wallet.controller.wallet import route as wallet_route
 
 
 route = APIRouter()
-route.include_router(wallet_route, prefix='/wallet', tags=['wallet'])
+route.include_router(wallet_route, tags=['wallet'])
 
 
 @route.get("/status/")

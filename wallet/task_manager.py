@@ -10,16 +10,16 @@ def create_celery_app() -> Celery:
         include=['wallet.tasks.worker']
     )
 
-    app.conf.task_routes = {
+    app_.conf.task_routes = {
         'withdraw.request': {'queue': 'withdraw.request'},
         'withdraw.action': {'queue': 'withdraw.action'},
 
     }
-    app.conf.update(
+    app_.conf.update(
         result_expires=3600,
     )
 
-    app.autodiscover_tasks([
+    app_.autodiscover_tasks([
         'wallet.tasks'
     ])
 

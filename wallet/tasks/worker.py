@@ -62,7 +62,8 @@ def withdraw_action(data):
     if not is_success:
         wlt.blocked_amount -= withdraw.amount
         wlt.amount += withdraw.amount
-        set_failed_withdraw(withdraw, desc, db)
+        withdraw.status = WithdrawStatus.FAILED
+        withdraw.description = desc
 
     else:
         wlt.blocked_amount -= withdraw.amount

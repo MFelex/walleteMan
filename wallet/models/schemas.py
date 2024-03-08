@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -7,14 +8,14 @@ class WalletView(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    amount: str
+    amount: int
     user_id: int
-    blocked_amount: str
+    blocked_amount: int
     created_at: datetime
 
     @field_validator('created_at')  # noqa
     @classmethod
-    def convert_string(cls, v: datetime) -> str:
+    def convert_time_to_string(cls, v: datetime) -> str:
         return v.isoformat()
 
 
@@ -22,14 +23,14 @@ class Deposit(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     tx_id: str
-    amount: str
+    amount: int
     user_id: int
 
 
 class WithdrawRequest(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    amount: str
+    amount: int
     user_id: int
     withdraw_at: datetime
 

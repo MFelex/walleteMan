@@ -31,6 +31,10 @@ def get_wallet(pk: int, db: Session) -> Dict:
 
 
 def deposit(body: Deposit, db: Session) -> str:
+    wlt: Wallet = crud.get_wallet_by_user_id(body.user_id, db)
+    if not wlt:
+        crud.create_wallet(body.user_id, db)
+
     try:
         crud.create_deposit(body, db)
     except IntegrityError as e:
