@@ -23,14 +23,14 @@ class Deposit(BaseModel):
 
     tx_id: str
     amount: str
-    user_id: str
+    user_id: int
 
 
 class WithdrawRequest(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     amount: str
-    user_id: str
+    user_id: int
     withdraw_at: datetime
 
 
@@ -40,3 +40,8 @@ class WithdrawRequest(BaseModel):
         if v < datetime.now():
             raise ValueError('Time has expired')
         return v
+
+
+class WithdrawAction(BaseModel):
+    id: int
+    user_id: int

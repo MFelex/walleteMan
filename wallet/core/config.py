@@ -9,11 +9,16 @@ class Settings(BaseSettings):
     ORIGIN: str
 
     DB_URL: PostgresDsn
+    BROKER_URL: str
 
     JWT_PUBKEY: str
-    JWT_PVTKEY: str
+    JWT_PVTKEY: str  # noqa
     JWT_ACCESS_EXPIRE: int
     JWT_REFRESH_EXPIRE: int
+
+    WITHDRAW_BEAT_SECOND: int
+
+    THIRD_PARTY_SERVICE_URL: str
 
     class Config:
         env_file = ".env"

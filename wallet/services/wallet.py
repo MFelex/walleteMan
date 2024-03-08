@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from wallet.models import crud
+from wallet.models.crud import get_wallet_by_user_id
 from wallet.models.dbmodels import Wallet
 from wallet.models.schemas import WalletView, Deposit, WithdrawRequest
 from wallet.core.exceptions import BadRequestException, NotFoundException
@@ -40,5 +41,8 @@ def deposit(body: Deposit, db: Session) -> str:
 
 
 def withdraw_request(body: WithdrawRequest, db: Session) -> str:
+    if not get_wallet_by_user_id(body.user_id, db):
+        raise BadRequestException('First, make a wallet')
+
     crud.create_withdraw(body, db)
     return f'The withdrawal was set for {str(body.withdraw_at)}'
