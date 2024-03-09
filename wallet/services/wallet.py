@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from wallet.models import crud
-from wallet.models.crud import get_wallet_by_user_id
+from wallet.models.crud import get_wallet_by_user_id, charge_wallet
 from wallet.models.dbmodels import Wallet
 from wallet.models.schemas import WalletView, Deposit, WithdrawRequest
 from wallet.core.exceptions import BadRequestException, NotFoundException
@@ -40,6 +40,8 @@ def deposit(body: Deposit, db: Session) -> str:
     except IntegrityError as e:
         logger.error(f'Deposit transaction of {body.tx_id} already exist {e}')
         raise BadRequestException('Duplicated transaction')
+
+    charge_wallet(wlt, body.amount, db)
 
     return 'Successfully charged'
 

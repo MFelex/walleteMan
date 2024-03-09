@@ -20,6 +20,12 @@ def get_wallet(pk: int, db: Session) -> Union[Wallet, None]:
     return db.query(Wallet).filter(Wallet.id == pk).first()  # noqa
 
 
+def charge_wallet(wallet: Wallet, amount: int, db: Session) -> None:
+    wallet.amount += amount
+    db.add(wallet)
+    db.commit()
+
+
 def get_wallet_by_user_id(user_id: int, db: Session) -> Union[Wallet, None]:
     return db.query(Wallet).filter(Wallet.user_id == user_id).first()  # noqa
 

@@ -47,7 +47,7 @@ def withdraw_action(data):
     db: Session = db_session
 
     wit = WithdrawAction(**json.loads(data))
-    withdraw: Withdraw = get_withdraw(wit.withdraw_id, db)
+    withdraw: Withdraw = get_withdraw(wit.id, db)
     wlt: Wallet = get_with_lock_wallet(wit.user_id, db)
 
     if wlt.amount < withdraw.amount:
