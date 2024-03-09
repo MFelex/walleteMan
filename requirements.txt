@@ -11,3 +11,6 @@ psycopg2-binary==2.9.9
 fastapi-restful==0.5.0
 celery
 requests
+
+flask[async]==2.2.2
+Werkzeug==2.2.2

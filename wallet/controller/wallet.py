@@ -11,7 +11,7 @@ from wallet.core.exceptions import CustomException
 route = APIRouter()
 
 
-@route.post('wallet/{user_id}/')
+@route.post('/wallet/{user_id}/')
 def create_wallet(user_id: int, db: Session = Depends(get_db)):
     logger.info(f'Create user wallet of user_id {user_id}')
     try:
@@ -22,7 +22,7 @@ def create_wallet(user_id: int, db: Session = Depends(get_db)):
     return created(res)
 
 
-@route.get('wallet/{pk}/')
+@route.get('/wallet/{pk}/')
 def get_wallet(pk: int, db: Session = Depends(get_db)):
     logger.info(f'Get user wallet of id {pk}')
     try:

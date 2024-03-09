@@ -1,0 +1,91 @@
+version: '3.8'
+services:
+  walleteman:
+    build: .
+    ports:
+      - "8085:8085"
+    container_name: walleteman
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
+    networks:
+      - toman-network
+
+  third_party:
+    build: .
+    ports:
+      - "8010:8010"
+    container_name: third_party
+    command: ["python3", "third_party/app.py"]
+    networks:
+      - toman-network
+
+  withdraw_beat:
+    build: .
+    container_name: withdraw_beat
+    command: [ "celery", "-A", "wallet.tasks.worker", "beat", "-l", "info" ]
+    env_file:
+      - .env
+    networks:
+      - toman-network
+    depends_on:
+      - rabbitmq
+
+  withdraw_request_worker:
+    build: .
+    container_name: withdraw_request_worker
+#    command: [ "bash", "-c", "sleep 10", ";", "celery", "-A", "wallet.task_manager", "worker", "-l", "info", "-Q", "withdraw.request" ]
+    command: bash -c "sleep 4; celery -A wallet.task_manager worker -l info -Q withdraw.request"
+    env_file:
+      - .env
+    networks:
+      - toman-network
+    depends_on:
+      - rabbitmq
+
+  withdraw_action_worker:
+    build: .
+    container_name: withdraw_action_worker
+#    command: [ "bash", "-c", "sleep 10", "&&", "celery", "-A", "wallet.task_manager", "worker", "-l", "info", "-Q", "withdraw.action" ]
+    command: bash -c "sleep 4; celery -A wallet.task_manager worker -l info -Q withdraw.action"
+    env_file:
+      - .env
+    networks:
+      - toman-network
+    depends_on:
+      - rabbitmq
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: walleteman
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - toman-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "19672:15672"
+    expose:
+      - "5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - toman-network
+
+networks:
+  toman-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  rabbitmq_data:

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, field_validator
@@ -26,6 +26,13 @@ class Deposit(BaseModel):
     amount: int
     user_id: int
 
+    @field_validator('amount')  # noqa
+    @classmethod
+    def negetive_amount(cls, v: int) -> int:
+        if v <= 0:
+            raise ValueError('negative amount')
+        return v
+
 
 class WithdrawRequest(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -38,7 +45,7 @@ class WithdrawRequest(BaseModel):
     @field_validator('withdraw_at')  # noqa
     @classmethod
     def check_now(cls, v: datetime) -> datetime:
-        if v < datetime.now():
+        if v < datetime.now(timezone.utc):
             raise ValueError('Time has expired')
         return v
 
