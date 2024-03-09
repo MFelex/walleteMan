@@ -51,32 +51,22 @@ def withdraw_action(data):
     wlt: Wallet = get_with_lock_wallet(wit.user_id, db)
 
     if wlt.amount < withdraw.amount:
+        db.close()
         return f'insufficient balance of user {wit.user_id}'
 
-    wlt.amount -= withdraw.amount
-    wlt.blocked_amount += withdraw.amount
-    db.add(wlt)
-    db.commit()
+    block_wallet(wlt, withdraw, db)
 
-    is_success, desc = withdraw_commit()
-    if not is_success:
-        wlt.blocked_amount -= withdraw.amount
-        wlt.amount += withdraw.amount
-        withdraw.status = WithdrawStatus.FAILED
-        withdraw.description = desc
+    is_success, desc = withdraw_api_call()
+    if is_success:
+        commit_wallet_withdraw(wlt, withdraw, db)
 
     else:
-        wlt.blocked_amount -= withdraw.amount
-        withdraw.status = WithdrawStatus.DONE
-
-    db.add(wlt)
-    db.add(withdraw)
-    db.commit()
+        unblock_wallet(wlt, withdraw, desc, db)
 
     return True
 
 
-def withdraw_commit() -> (bool, str):
+def withdraw_api_call() -> (bool, str):
     is_success: bool = False
     status: str = ''
 

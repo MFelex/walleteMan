@@ -64,3 +64,28 @@ def set_pending_withdraw(withdraw: Withdraw, db: Session) -> None:
     withdraw.status = WithdrawStatus.PENDING
     db.add(withdraw)
     db.commit()
+
+
+def block_wallet(wallet: Wallet, withdraw: Withdraw, db: Session) -> None:
+    wallet.amount -= withdraw.amount
+    wallet.blocked_amount += withdraw.amount
+    db.add(wallet)
+    db.commit()
+
+
+def unblock_wallet(wallet: Wallet, withdraw: Withdraw, desc: str, db: Session) -> None:
+    wallet.blocked_amount -= withdraw.amount
+    wallet.amount += withdraw.amount
+    withdraw.status = WithdrawStatus.FAILED
+    withdraw.description = desc
+    db.add(wallet)
+    db.add(withdraw)
+    db.commit()
+
+
+def commit_wallet_withdraw(wallet: Wallet, withdraw: Withdraw, db: Session) -> None:
+    wallet.blocked_amount -= withdraw.amount
+    withdraw.status = WithdrawStatus.DONE
+    db.add(wallet)
+    db.add(withdraw)
+    db.commit()
